@@ -2,7 +2,9 @@
 
 A simple, lightweight, automated internet speedtest collector for network speed analysis.
 
-It collects data about internet speed once every `1` hours.
+It collects data about internet speed once every `1` hours, `24` collections each day.
+
+![Screenshot of the web interface](screenshot.png)
 
 # Requirements
 
@@ -16,7 +18,7 @@ It collects data about internet speed once every `1` hours.
 docker compose build && docker compose up -d
 ```
 
-The database is available at port `8889`, the web interface (coming soon) is available at port `8888`.
+The database is available at port `8889`, the web interface is available at port `8888`.
 
 # License
 

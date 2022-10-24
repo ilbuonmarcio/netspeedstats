@@ -1,3 +1,138 @@
 <!DOCTYPE html>
 
-<h1>Hello Stats!</h1>
+<html lang="en">
+    <head>
+        <title>netspeedstats | Dashboard</title>
+        <meta charset="utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <style>
+            html, body {
+                font-family: 'Poppins', sans-serif;
+                margin: 0;
+                padding: 0;
+
+                height: 100vh;
+                background-color: #874387;
+            }
+
+            .container {
+                display: grid;
+                grid-template-rows: 3fr 2fr;
+                height: 100%;
+            }
+
+            .big {
+                font-size: 60px;
+            }
+
+            .medium {
+                font-size: 38px;
+            }
+
+            .small {
+                font-size: 22px;
+            }
+
+            .card {
+                display: grid;
+                grid-template-rows: 4fr 1fr 2fr;
+                border: 3px solid #f0f0f0;
+                background-color: #f6f6f6;
+                color: #404040;
+                border-radius: 20px;
+                box-shadow: 0px 3px 9px #00000011;
+                /* margin: 12px 12px 32px 12px; */
+            }
+
+            .card-top, .card-mid, .card-bot {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-direction: column;
+            }
+
+            .row-top .card {
+                height: 100%;
+            }
+
+            .row-top {
+                padding: 32px;
+                display: grid;
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .row-bottom {
+                padding: 32px;
+                display: grid;
+                grid-template-columns: 1fr 1fr 1fr;
+                gap: 20px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="row-top">
+                <div class="card">
+                    <div class="card-top">
+                        <div class="big">Avg. <i class="fas fa-arrow-down"></i> : {{ stats[1]['avg_download'] }}Mbps</div>
+                        <div class="medium">Avg. <i class="fas fa-arrow-up"></i> : {{ stats[1]['avg_upload'] }}Mbps</div>
+                    </div>
+                    <div class="card-mid">
+                        <div class="medium">Avg. Ping: {{ stats[1]['avg_ping'] }}ms</div>
+                    </div>
+                    <div class="card-bot">
+                        <div class="small">Most used server: {{ stats[1]['most_used_server'] }}</div>
+                        <div class="small">Period coverage: {{ stats[1]['period_coverage_percentage'] }}%</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row-bottom">
+                <div class="card">
+                    <div class="card-top">
+                        <div class="big">Avg. <i class="fas fa-arrow-down"></i> : {{ stats[3]['avg_download'] }}Mbps</div>
+                        <div class="medium">Avg. <i class="fas fa-arrow-up"></i> : {{ stats[3]['avg_upload'] }}Mbps</div>
+                    </div>
+                    <div class="card-mid">
+                        <div class="medium">Avg. Ping: {{ stats[3]['avg_ping'] }}ms</div>
+                    </div>
+                    <div class="card-bot">
+                        <div class="small">Most used server: {{ stats[3]['most_used_server'] }}</div>
+                        <div class="small">Period coverage: {{ stats[3]['period_coverage_percentage'] }}%</div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-top">
+                        <div class="big">Avg. <i class="fas fa-arrow-down"></i> : {{ stats[7]['avg_download'] }}Mbps</div>
+                        <div class="medium">Avg. <i class="fas fa-arrow-up"></i> : {{ stats[7]['avg_upload'] }}Mbps</div>
+                    </div>
+                    <div class="card-mid">
+                        <div class="medium">Avg. Ping: {{ stats[7]['avg_ping'] }}ms</div>
+                    </div>
+                    <div class="card-bot">
+                        <div class="small">Most used server: {{ stats[7]['most_used_server'] }}</div>
+                        <div class="small">Period coverage: {{ stats[7]['period_coverage_percentage'] }}%</div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-top">
+                        <div class="big">Avg. <i class="fas fa-arrow-down"></i> : {{ stats[30]['avg_download'] }}Mbps</div>
+                        <div class="medium">Avg. <i class="fas fa-arrow-up"></i> : {{ stats[30]['avg_upload'] }}Mbps</div>
+                    </div>
+                    <div class="card-mid">
+                        <div class="medium">Avg. Ping: {{ stats[30]['avg_ping'] }}ms</div>
+                    </div>
+                    <div class="card-bot">
+                        <div class="small">Most used server: {{ stats[30]['most_used_server'] }}</div>
+                        <div class="small">Period coverage: {{ stats[30]['period_coverage_percentage'] }}%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/js/all.min.js" integrity="sha512-naukR7I+Nk6gp7p5TMA4ycgfxaZBJ7MO5iC3Fp6ySQyKFHOGfpkSZkYVWV5R7u7cfAicxanwYQ5D1e17EfJcMA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    </body>
+</html>
