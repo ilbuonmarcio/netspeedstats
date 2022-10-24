@@ -1,9 +1,20 @@
 from loguru import logger
+from flask import Flask, render_template
+import threading
 import speedtest
 import pymysql
 import time
 import json
+import sys
 import os
+
+
+app = Flask(__name__)
+app.config.update(
+    TESTING=False,
+    ENV='production',
+    DEBUG=False
+)
 
 
 servers = []
@@ -62,36 +73,54 @@ def get_connection():
                                 cursorclass=pymysql.cursors.DictCursor)
 
 
-while True:
-    s = speedtest.Speedtest()
-    s.get_best_server()
-    s.download(threads=threads)
-    s.upload(threads=threads)
+def tester_worker():
+    logger.info("Tester thread is running!")
 
-    results_dict = s.results.dict()
+    while True:
+        try:
+            s = speedtest.Speedtest()
+            s.get_best_server()
+            s.download(threads=threads)
+            s.upload(threads=threads)
 
-    connection = get_connection()
-    with connection:
-        with connection.cursor() as cursor:
-            sql = "INSERT INTO `results` (`upload`, `download`, `ping`, `server_id`, `server_name`, `client_ip`, `created_at`) VALUES (%s, %s, %s, %s, %s, %s, NOW())"
-            cursor.execute(sql, (
-                results_dict['upload'],
-                results_dict['download'],
-                results_dict['ping'],
-                results_dict['server']['id'],
-                results_dict['server']['sponsor'],
-                results_dict['client']['ip']))
+            results_dict = s.results.dict()
 
-        connection.commit()
+            connection = get_connection()
+            with connection:
+                with connection.cursor() as cursor:
+                    sql = "INSERT INTO `results` (`upload`, `download`, `ping`, `server_id`, `server_name`, `client_ip`, `created_at`) VALUES (%s, %s, %s, %s, %s, %s, NOW())"
+                    cursor.execute(sql, (
+                        results_dict['upload'],
+                        results_dict['download'],
+                        results_dict['ping'],
+                        results_dict['server']['id'],
+                        results_dict['server']['sponsor'],
+                        results_dict['client']['ip']))
+
+                connection.commit()
 
 
-    stats = get_all_stats()
+            stats = get_all_stats()
 
-    logger.info('-' * 64)
-    logger.info(f"(Today) Period Coverage: {stats[1]['period_coverage_percentage']} % -> DL {stats[1]['avg_download']} Mbps, UL {stats[1]['avg_upload']} Mbps, PING {stats[1]['avg_ping']}ms [most used server: {stats[1]['most_used_server']}]")
-    logger.info(f"(Last 3 days) Period Coverage: {stats[3]['period_coverage_percentage']} % -> DL {stats[3]['avg_download']} Mbps, UL {stats[3]['avg_upload']} Mbps, PING {stats[3]['avg_ping']}ms [most used server: {stats[3]['most_used_server']}]")
-    logger.info(f"(Last 7 days) Period Coverage: {stats[7]['period_coverage_percentage']} % -> DL {stats[7]['avg_download']} Mbps, UL {stats[7]['avg_upload']} Mbps, PING {stats[7]['avg_ping']}ms [most used server: {stats[7]['most_used_server']}]")
-    logger.info(f"(Last 30 days) Period Coverage: {stats[30]['period_coverage_percentage']} % -> DL {stats[30]['avg_download']} Mbps, UL {stats[30]['avg_upload']} Mbps, PING {stats[30]['avg_ping']}ms [most used server: {stats[30]['most_used_server']}]")
+            logger.info('-' * 64)
+            logger.info(f"(Today) Period Coverage: {stats[1]['period_coverage_percentage']} % -> DL {stats[1]['avg_download']} Mbps, UL {stats[1]['avg_upload']} Mbps, PING {stats[1]['avg_ping']}ms [most used server: {stats[1]['most_used_server']}]")
+            logger.info(f"(Last 3 days) Period Coverage: {stats[3]['period_coverage_percentage']} % -> DL {stats[3]['avg_download']} Mbps, UL {stats[3]['avg_upload']} Mbps, PING {stats[3]['avg_ping']}ms [most used server: {stats[3]['most_used_server']}]")
+            logger.info(f"(Last 7 days) Period Coverage: {stats[7]['period_coverage_percentage']} % -> DL {stats[7]['avg_download']} Mbps, UL {stats[7]['avg_upload']} Mbps, PING {stats[7]['avg_ping']}ms [most used server: {stats[7]['most_used_server']}]")
+            logger.info(f"(Last 30 days) Period Coverage: {stats[30]['period_coverage_percentage']} % -> DL {stats[30]['avg_download']} Mbps, UL {stats[30]['avg_upload']} Mbps, PING {stats[30]['avg_ping']}ms [most used server: {stats[30]['most_used_server']}]")
 
-    # Run every 1 hour
-    time.sleep(3600)
+            # Run every 1 hour
+            time.sleep(3600)
+        except:
+            sys.exit(-1) # Restarts the container automagically!
+
+
+@app.route('/', methods=['GET'])
+def root():
+    return render_template('index.html', stats=get_all_stats())
+
+
+if __name__ == "__main__":
+    t = threading.Thread(target=tester_worker, args=())
+    t.start()
+
+    app.run(host="0.0.0.0", port="5000")
