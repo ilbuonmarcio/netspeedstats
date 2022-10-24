@@ -1,0 +1,32 @@
+version: '3'
+services:
+    tester:
+      build:
+        context: tester/
+        dockerfile: Dockerfile
+      ports:
+        - "8888:5000"
+      environment:
+        - FLASK_ENV=production
+        - APP_DB_USER=netspeedstats
+        - APP_DB_PASS=123
+        - APP_DB_NAME=netspeedstats
+        - APP_DB_HOST=database
+        - APP_DB_PORT=3306
+      restart: unless-stopped
+      depends_on:
+        - database
+      command: ["python", "main.py"]
+    database:
+      build:
+        context: database/
+        dockerfile: Dockerfile
+      ports:
+        - "8889:3306"
+      environment:
+        - MARIADB_ROOT_PASSWORD=123
+        - MARIADB_DATABASE=netspeedstats
+        - MARIADB_USER=netspeedstats
+        - MARIADB_PASSWORD=123
+      restart: unless-stopped
+

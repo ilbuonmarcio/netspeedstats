@@ -1,0 +1,11 @@
+CREATE TABLE results (
+    id INT NOT NULL AUTO_INCREMENT,
+    upload FLOAT NOT NULL DEFAULT 0,
+    download FLOAT NOT NULL DEFAULT 0,
+    ping FLOAT NOT NULL DEFAULT 0,
+    server_id INT NOT NULL DEFAULT 0, 
+    server_name VARCHAR(200) NOT NULL DEFAULT 'unknown',
+    client_ip CHAR(15) NOT NULL DEFAULT '0.0.0.0',
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id)
+);
