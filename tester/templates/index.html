@@ -37,6 +37,12 @@
                 font-size: 22px;
             }
 
+            .title {
+                font-size: 48px;
+                font-style: italic;
+                color: rgb(57, 40, 56);
+            }
+
             .card {
                 display: grid;
                 grid-template-rows: 4fr 1fr 2fr;
@@ -79,6 +85,7 @@
             <div class="row-top">
                 <div class="card">
                     <div class="card-top">
+                        <div class="title">Last 24 Hours</div>
                         <div class="big">Avg. <i class="fas fa-arrow-down"></i> : {{ stats[1]['avg_download'] }}Mbps</div>
                         <div class="medium">Avg. <i class="fas fa-arrow-up"></i> : {{ stats[1]['avg_upload'] }}Mbps</div>
                     </div>
@@ -94,6 +101,7 @@
             <div class="row-bottom">
                 <div class="card">
                     <div class="card-top">
+                        <div class="title">Last 3 Days</div>
                         <div class="big">Avg. <i class="fas fa-arrow-down"></i> : {{ stats[3]['avg_download'] }}Mbps</div>
                         <div class="medium">Avg. <i class="fas fa-arrow-up"></i> : {{ stats[3]['avg_upload'] }}Mbps</div>
                     </div>
@@ -107,6 +115,7 @@
                 </div>
                 <div class="card">
                     <div class="card-top">
+                        <div class="title">Last 7 Days</div>
                         <div class="big">Avg. <i class="fas fa-arrow-down"></i> : {{ stats[7]['avg_download'] }}Mbps</div>
                         <div class="medium">Avg. <i class="fas fa-arrow-up"></i> : {{ stats[7]['avg_upload'] }}Mbps</div>
                     </div>
@@ -120,6 +129,7 @@
                 </div>
                 <div class="card">
                     <div class="card-top">
+                        <div class="title">Last 30 Days</div>
                         <div class="big">Avg. <i class="fas fa-arrow-down"></i> : {{ stats[30]['avg_download'] }}Mbps</div>
                         <div class="medium">Avg. <i class="fas fa-arrow-up"></i> : {{ stats[30]['avg_upload'] }}Mbps</div>
                     </div>
