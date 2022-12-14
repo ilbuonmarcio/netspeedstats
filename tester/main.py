@@ -23,8 +23,8 @@ threads = 4
 
 # The parameter here is for days between TODAY and TODAY - %s DAYS
 TEMPLATE_QUERY_REPORT = """SELECT
-	ROUND(AVG(download) / 1024 / 1024 * 8, 2) AS avg_download,
-	ROUND(AVG(upload) / 1024 / 1024 * 8, 2) AS avg_upload,
+	ROUND(AVG(download), 2) AS avg_download,
+	ROUND(AVG(upload), 2) AS avg_upload,
 	ROUND(AVG(ping), 2) AS avg_ping,
 	(
 	SELECT
@@ -78,6 +78,7 @@ def tester_worker():
 
     while True:
         try:
+            logger.info("Trying to gather results...")
             s = speedtest.Speedtest()
             s.get_best_server()
             s.download(threads=threads)
@@ -90,8 +91,8 @@ def tester_worker():
                 with connection.cursor() as cursor:
                     sql = "INSERT INTO `results` (`upload`, `download`, `ping`, `server_id`, `server_name`, `client_ip`, `created_at`) VALUES (%s, %s, %s, %s, %s, %s, NOW())"
                     cursor.execute(sql, (
-                        results_dict['upload'],
-                        results_dict['download'],
+                        results_dict['upload'] / 1024 / 1024,
+                        results_dict['download'] / 1024 / 1024,
                         results_dict['ping'],
                         results_dict['server']['id'],
                         results_dict['server']['sponsor'],
@@ -109,9 +110,13 @@ def tester_worker():
             logger.info(f"(Last 30 days) Period Coverage: {stats[30]['period_coverage_percentage']} % -> DL {stats[30]['avg_download']} Mbps, UL {stats[30]['avg_upload']} Mbps, PING {stats[30]['avg_ping']}ms [most used server: {stats[30]['most_used_server']}]")
 
             # Run every 1 hour
-            time.sleep(3600)
-        except:
-            sys.exit(-1) # Restarts the container automagically!
+            time.sleep(0)
+        except Exception as e:
+            logger.error(str(e))
+            logger.warning("Waiting 10 seconds before restarting operations...")
+            time.sleep(10)
+            
+    logger.info("Exiting...")
 
 
 @app.route('/', methods=['GET'])
