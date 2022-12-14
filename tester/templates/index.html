@@ -16,7 +16,8 @@
                 padding: 0;
 
                 height: 100vh;
-                background-color: #874387;
+                background-color: #ffffff;
+                box-sizing: border-box;
             }
 
             .container {
@@ -51,6 +52,7 @@
                 color: #404040;
                 border-radius: 20px;
                 box-shadow: 0px 3px 9px #00000011;
+                width: 100%;
                 /* margin: 12px 12px 32px 12px; */
             }
 
@@ -83,7 +85,7 @@
     <body>
         <div class="container">
             <div class="row-top">
-                <div class="card">
+                <div class="card" style="background: url(/graphs/1.svg) no-repeat; background-size: 100% 100%; background-clip: border-box;">
                     <div class="card-top">
                         <div class="title">Last 24 Hours</div>
                         <div class="big">Avg. <i class="fas fa-arrow-down"></i> : {{ stats[1]['avg_download'] }}Mbps</div>
@@ -99,7 +101,7 @@
                 </div>
             </div>
             <div class="row-bottom">
-                <div class="card">
+                <div class="card" style="background: url(/graphs/3.svg) no-repeat; background-size: 100% 100%; background-clip: border-box;">
                     <div class="card-top">
                         <div class="title">Last 3 Days</div>
                         <div class="big">Avg. <i class="fas fa-arrow-down"></i> : {{ stats[3]['avg_download'] }}Mbps</div>
@@ -113,7 +115,7 @@
                         <div class="small">Period coverage: {{ stats[3]['period_coverage_percentage'] }}%</div>
                     </div>
                 </div>
-                <div class="card">
+                <div class="card" style="background: url(/graphs/7.svg) no-repeat; background-size: 100% 100%; background-clip: border-box;">
                     <div class="card-top">
                         <div class="title">Last 7 Days</div>
                         <div class="big">Avg. <i class="fas fa-arrow-down"></i> : {{ stats[7]['avg_download'] }}Mbps</div>
@@ -127,7 +129,7 @@
                         <div class="small">Period coverage: {{ stats[7]['period_coverage_percentage'] }}%</div>
                     </div>
                 </div>
-                <div class="card">
+                <div class="card" style="background: url(/graphs/30.svg) no-repeat; background-size: 100% 100%; background-clip: border-box;">
                     <div class="card-top">
                         <div class="title">Last 30 Days</div>
                         <div class="big">Avg. <i class="fas fa-arrow-down"></i> : {{ stats[30]['avg_download'] }}Mbps</div>
