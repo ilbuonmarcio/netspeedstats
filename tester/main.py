@@ -110,7 +110,7 @@ def tester_worker():
             logger.info(f"(Last 30 days) Period Coverage: {stats[30]['period_coverage_percentage']} % -> DL {stats[30]['avg_download']} Mbps, UL {stats[30]['avg_upload']} Mbps, PING {stats[30]['avg_ping']}ms [most used server: {stats[30]['most_used_server']}]")
 
             # Run every 1 hour
-            time.sleep(0)
+            time.sleep(3600)
         except Exception as e:
             logger.error(str(e))
             logger.warning("Waiting 10 seconds before restarting operations...")
